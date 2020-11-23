@@ -534,10 +534,16 @@ class SOM(object):
 
         return out.astype(int)
 
+    def get_node_vectors(self):
+        return self._normalizer.denormalize_by(
+            self.data_raw,
+            self.codebook.matrix
+        )
+
     def cluster(self, clusterer):
         cl_labels = clusterer.fit_predict(
-            self._normalizer.denormalize_by(self.data_raw,
-                                            self.codebook.matrix))
+            self.get_node_vectors()
+        )
         self.cluster_labels = cl_labels
         return cl_labels
 
