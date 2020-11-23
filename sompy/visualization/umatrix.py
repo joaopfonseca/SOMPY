@@ -4,11 +4,15 @@ from pylab import imshow, contour
 from math import sqrt
 import numpy as np
 import scipy
-
+from copy import deepcopy
 
 class UMatrixView(MatplotView):
 
     def build_u_matrix(self, som, distance=1, row_normalized=False):
+        som = deepcopy(som)
+        if som.codebook.lattice == "hexa":
+            som.codebook.lattice = "rect"
+
         UD2 = som.calculate_map_dist()
         Umatrix = np.zeros((som.codebook.nnodes, 1))
         codebook = som.codebook.matrix
