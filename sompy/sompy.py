@@ -271,7 +271,7 @@ class SOM(object):
         #print("maxtrainlen %d",maxtrainlen)
         #lbugnon: add trainlen_factor
         trainlen=int(trainlen*trainlen_factor)
-        
+
         if self.initialization == 'random':
             radiusin = max(1, np.ceil(ms/3.)) if not radiusin else radiusin
             radiusfin = max(1, radiusin/6.) if not radiusfin else radiusfin
@@ -299,11 +299,11 @@ class SOM(object):
             radiusfin = 1 if not radiusfin else radiusfin # max(1, ms/128)
 
         #print("maxtrainlen %d",maxtrainlen)
-        
+
         #lbugnon: add trainlen_factor
         trainlen=int(trainlen_factor*trainlen)
-        
-            
+
+
         self._batchtrain(trainlen, radiusin, radiusfin, njob, shared_memory)
 
     def _batchtrain(self, trainlen, radiusin, radiusfin, njob=1,
@@ -350,9 +350,9 @@ class SOM(object):
                 qerror)
             if np.any(np.isnan(qerror)):
                 logging.info("nan quantization error, exit train\n")
-                
+
                 #sys.exit("quantization error=nan, exit train")
-            
+
         bmu[1] = np.sqrt(bmu[1] + fixed_euclidean_x2)
         self._bmu = bmu
 
@@ -534,9 +534,8 @@ class SOM(object):
 
         return out.astype(int)
 
-    def cluster(self, n_clusters=8, random_state=0):
-        import sklearn.cluster as clust
-        cl_labels = clust.KMeans(n_clusters=n_clusters, random_state=random_state).fit_predict(
+    def cluster(self, clusterer):
+        cl_labels = clusterer.fit_predict(
             self._normalizer.denormalize_by(self.data_raw,
                                             self.codebook.matrix))
         self.cluster_labels = cl_labels
